@@ -1,41 +1,32 @@
-from flask import Flask, render_template, request
 import openai
-import os
+import streamlit as st
 
-app = Flask(__name__)
+# Read the API key from file
+with open('open_key.txt') as f:
+    api_key = f.read().strip()
 
-# Initialize OpenAI API
-openai.api_key = os.getenv('sk-h4QcK58puqavFZa3q6vFT3BlbkFJD28NZ9asmGQxpM5EKy')
+# Setting up the OpenAI client with the API key
+openai.api_key = api_key
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# Streamlit UI
+st.title('AI Code Reviewer ')
+st.subheader("Enter your code to fix the bugs!")
 
-@app.route('/review', methods=['POST'])
-def review_code():
-    code = request.form['code']
+# Text input for code
+prompt = st.text_area("Enter your code: ")
 
-    # Call OpenAI API for code review
-    response = openai.Completion.create(
-        engine="davinci-codex",
-        prompt=code,
-        max_tokens=100,
-        n=1,
-        stop=None,
-        temperature=0,
+# Button to generate response
+if st.button('Generate'):
+    # Sending prompt to OpenAI's GPT-3.5 model
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo-1106",
+        messages=[
+            {"role": "system", "content": "You are a code bug fixer, you return the bugs in code in an ordered list and also the correct code in jupyter notebook look."},
+            {"role": "user", "content": prompt}
+        ]
     )
 
-    # Process API response
-    # Here you would extract bugs, suggestions, and fixed code from the response
-    bugs = []  # Placeholder for extracted bugs
-    suggestions = []  # Placeholder for suggestions for improvement
-    fixed_code = []  # Placeholder for fixed code snippets
-
-    # Populate the results on the review page
-    return render_template('review.html', bugs=bugs, suggestions=suggestions, fixed_code=fixed_code)
-
-if __name__ == '__main__':
-    app.run()
-
+    # Displaying the response
+    st.write(response['choices'][0]['message']['content'])
 
 
