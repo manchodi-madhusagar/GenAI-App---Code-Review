@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenAI App - Code Review Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 10px 10px 0 0;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .list-group-item {
+            border-radius: 0;
+        }
+        .fixed-code {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">Code Review Results</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-danger" role="alert">
+                            <h4 class="alert-heading">Bugs Found:</h4>
+                            <ul class="list-group">
+                                {% for bug in bugs %}
+                                    <li class="list-group-item">{{ bug }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="alert alert-info" role="alert">
+                            <h4 class="alert-heading">Suggestions for Improvement:</h4>
+                            <ul class="list-group">
+                                {% for suggestion in suggestions %}
+                                    <li class="list-group-item">{{ suggestion }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Fixed Code:</h4>
+                            <pre class="fixed-code">{{ fixed_code }}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
